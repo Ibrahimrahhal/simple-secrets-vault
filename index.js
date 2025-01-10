@@ -82,6 +82,15 @@ function loadSpecificSecretsToEnv(keys, password) {
   });
 }
 
+function getExportString(secrets) {
+  const isWindows = process.platform === 'win32';
+  const command = isWindows ? 'set' : 'export';
+  
+  return Object.entries(secrets)
+    .map(([key, value]) => `${command} ${key}=${value}`)
+    .join('\n');
+}
+
 const command = process.argv[2];
 
 if (command === 'set') {
@@ -132,7 +141,17 @@ if (command === 'set') {
     console.log('Specific secrets loaded into environment variables.');
     rl.close();
   });
+} else if (command === 'load-str') {
+  rl.question('Enter password: ', (password) => {
+    process.stdout.moveCursor(0, -1);
+    process.stdout.clearLine(1);
+    process.stdout.write('Enter password: *****\n');
+
+    const secrets = loadSecrets(password);
+    console.log(getExportString(secrets));
+    rl.close();
+  });
 } else {
-  console.log('Unknown command. Available commands: set, get, load, load-specific');
+  console.log('Unknown command. Available commands: set, get, load, load-specific, load-str');
   process.exit(1);
 }
