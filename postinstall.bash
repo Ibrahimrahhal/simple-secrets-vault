@@ -18,11 +18,18 @@ function_def='
 local-vault() {
     local vault_path
     vault_path="$(npm bin)/simple-local-vault"
+    local global_vault_path
+    global_vault_path="$(npm root -g)/@ibrahim-rahhal/simple-secrets-vault/bin/index"
     
-    # Check if the file exists
-    if [[ ! -f "$vault_path" ]]; then
+    # Check if the file exists locally or globally
+    if [[ ! -f "$vault_path" ]] && [[ ! -f "$global_vault_path" ]]; then
         echo "local-vault script not found. Have you installed the package?"
         return 1
+    fi
+
+    # Use global path if local not found
+    if [[ ! -f "$vault_path" ]]; then
+        vault_path="$global_vault_path"
     fi
 
     # Source the script and pass all arguments

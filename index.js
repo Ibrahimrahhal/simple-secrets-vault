@@ -88,6 +88,10 @@ if (command === 'set') {
   const key = process.argv[3];
   const value = process.argv[4];
   rl.question('Enter password: ', (password) => {
+    process.stdout.moveCursor(0, -1);
+    process.stdout.clearLine(1);
+    process.stdout.write('Enter password: *****\n');
+    
     setSecret(key, value, password);
     console.log('Secret set successfully.');
     rl.close();
@@ -95,6 +99,10 @@ if (command === 'set') {
 } else if (command === 'get') {
   const key = process.argv[3];
   rl.question('Enter password: ', (password) => {
+    process.stdout.moveCursor(0, -1);
+    process.stdout.clearLine(1);
+    process.stdout.write('Enter password: *****\n');
+
     const secret = getSecret(key, password);
     if (secret) {
       console.log(`Secret: ${secret}`);
@@ -105,6 +113,10 @@ if (command === 'set') {
   });
 } else if (command === 'load') {
   rl.question('Enter password: ', (password) => {
+    process.stdout.moveCursor(0, -1);
+    process.stdout.clearLine(1);
+    process.stdout.write('Enter password: *****\n');
+
     loadSecretsToEnv(password);
     console.log('All secrets loaded into environment variables.');
     rl.close();
@@ -112,6 +124,10 @@ if (command === 'set') {
 } else if (command === 'load-specific') {
   const keys = process.argv[3];
   rl.question('Enter password: ', (password) => {
+    process.stdout.moveCursor(0, -1);
+    process.stdout.clearLine(1);
+    process.stdout.write('Enter password: *****\n');
+
     loadSpecificSecretsToEnv(keys, password);
     console.log('Specific secrets loaded into environment variables.');
     rl.close();
